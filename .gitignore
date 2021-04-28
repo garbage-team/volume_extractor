@@ -140,4 +140,5 @@ cython_debug/
 # Project specific
 log/
 data/
-.tflite
+.idea/
+*.tflite
