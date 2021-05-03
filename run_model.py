@@ -9,7 +9,7 @@ else:
     import tflite_runtime.interpreter as tflite
 
 
-def run_model():
+def run_model(model_path):
     """
     Runs an inference using a tflite model on an input image from a video capture stream
 
@@ -21,7 +21,7 @@ def run_model():
                                 crop_fov=(69.4, 42.5))
     rgb = np.expand_dims(input_data, 0)  # [h, w, c] -> [1(b), h, w, c]
     pred_depth = interpret_model(rgb,
-                                 model_path="./lite_model.tflite")
+                                 model_path=model_path)
     log_depth_image(pred_depth[0], rgb[0])
     return rgb, pred_depth
 

@@ -7,10 +7,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
 
+MODEL_PATH = "./lite_model_wo_frl.tflite"
+
 def main():
     intel = (69.4, 42.5)
     while True:
-        rgb, depth = run_model()
+        rgb, depth = run_model(MODEL_PATH)
         depth = depth[0]
         xyz = depth_to_xyz(depth, fov=intel)
         xyz_clipped = clip_by_border(xyz, (-.9, .9), (-.35, .35), (2.4, 1))
