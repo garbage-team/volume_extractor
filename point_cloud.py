@@ -28,6 +28,7 @@ def depth_to_xyz(depth, fov=(82.1, 52.2)):
     x = np.expand_dims(x, -1)  # [h, w, 1]
     y = np.expand_dims(y, -1)  # [h, w, 1]
     z = np.expand_dims(z, -1)  # [h, w, 1]
+    print(x_size, y_size, x.shape, y.shape)
     p = np.concatenate((x, y, z), axis=-1)   # [h, w, 3]
     p = np.reshape(p, (x_size * y_size, 3))  # [p, 3]
 
