@@ -10,7 +10,12 @@ Volume extractor for garbage fill rate measuring
 * matplotlib
 * opencv-python
 
-## Guide: Setup garbage bin measurement
+## Guide: Installation and setup
+1. Clone the repository.
+2. Install libraries and dependencies, installation will vary depending on system.
+3. Train a model or download ours, and place it inside the folder. Update the MODEL_PATH variable in main.py so that it matches your model.
+
+## Guide: Setup garbage bin measurement in the lab
 1. Ensure the RPi is connected to the Logitech camera on the tripod. The tripod height should be such as the USB cable to the RPi is almost fully stretched. Ensure that the power adapter is plugged in and that the RPi is running. 
 
 2. On the host computer (that will be connected to the screen during the live demo), connect to the “scania-smartlab” network and run “VNC viewer”. Connect to the RPi using the IP and login credentials given in the document on Teams.
