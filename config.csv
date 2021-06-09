@@ -1,0 +1,6 @@
+config_file_path,config.csv
+var_webcam_fov_x,82.1
+var_webcam_fov_y,52.2
+var_crop_fov_x,69.4
+var_crop_fov_y,42.5
+var_empty_volume,-1.231

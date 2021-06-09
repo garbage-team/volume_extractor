@@ -3,9 +3,9 @@ from camera_controller import camera_capture
 from point_cloud import xyz_to_volume, depth_to_xyz, bins_to_depth
 from logger import log_depth_image
 import os
-if os.name == "nt":
+if os.name == "nt":  # If running Windows OS
     import tensorflow.lite as tflite
-else:
+else:                # If anything else
     import tflite_runtime.interpreter as tflite
 
 
