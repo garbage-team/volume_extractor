@@ -61,23 +61,6 @@ def xyz_to_volume(xyz):
     return volume
 
 
-def bins_to_depth(depth_bins):
-    """
-    Converts a bin array into a depth image
-    Copy of src.image_utils bins_to_depth, but without tensorflow dependencies
-
-    :param depth_bins: the depth bins in one_hot encoding, shape (b, h, w, c),
-    the depth bins can also be passed as softmax bins of shape (b, h, w, c)
-    :return: a depth image of shape (b, h, w) with type tf.float32
-    """
-    bin_interval = (np.log10(80) - np.log10(0.25)) / 150
-    # the borders variable here holds the depth for each specific value of the one hot encoded bins
-    borders = np.asarray([np.log10(0.25) + (bin_interval * (i + 0.5)) for i in range(150)])
-    depth = np.matmul(depth_bins, borders)  # [b, h, w, (c] * [c), 1] -> [b, h, w, 1]
-    depth = np.power(10., depth)
-    return depth
-
-
 def clip_by_border(xyz, x_lim, y_lim, z_lim):
     xyz = xyz[np.where(xyz[:, 0] < max(x_lim))]
     xyz = xyz[np.where(xyz[:, 0] > min(x_lim))]
