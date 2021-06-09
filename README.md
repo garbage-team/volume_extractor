@@ -4,7 +4,7 @@ Volume extractor for garbage fill rate measuring
 
 ## Dependencies
 * Python 3.7 or 3.8
-* tensorflow or tflite_runtime
+* tensorflow or tflite_runtime (depending on system)
 * numpy
 * scipy
 * matplotlib
@@ -12,8 +12,9 @@ Volume extractor for garbage fill rate measuring
 
 ## Guide: Installation and setup
 1. Clone the repository.
-2. Install libraries and dependencies, installation will vary depending on system.
-3. Train a model or download ours, and place it inside the folder. Update the MODEL_PATH variable in main.py so that it matches your model.
+2. Install libraries and dependencies, installation will vary depending on system. Tensorflow Lite (TFLite) is recommended for running on RPi.
+3. Train a model or download ours, and place it inside the folder. Ensure you are running a TFLite model. Update the MODEL_PATH variable in main.py so that it matches your models path.
+  * To run a regular tensorflow model some modification in the code needs to be done, or it can be converted using [save_to_tflite()](https://github.com/garbage-team/garbage_view/blob/67b5575ce4821a43bd88860c34d9fbcef89b8e03/src/main.py#L91) from the [garbage-view](https://github.com/garbage-team/garbage_view) repository.
 
 ## Guide: Setup garbage bin measurement in the lab
 1. Ensure the RPi is connected to the Logitech camera on the tripod. The tripod height should be such as the USB cable to the RPi is almost fully stretched. Ensure that the power adapter is plugged in and that the RPi is running. 
@@ -28,7 +29,7 @@ Volume extractor for garbage fill rate measuring
 
   * Make sure that the inside of the bin is as free from shadows as possible to enable better results. 
 
-5. The program should now be running! Note that accuracy is not great with this method, and +/- 10% error is to be expected. The program runs until closed using “ctrl + c” in the terminal. 
+5. The program should now be running! A new measurment is presented around every 5-10 seconds depending on system. Note that accuracy is not great with this method, and +/- 10% error is to be expected. The program runs until closed using “ctrl + c” in the terminal. 
 
 ## Authors
 * Jonas Jungåker
