@@ -23,7 +23,7 @@ class DepthModel:
         b > 1, the model will only return the first depth image
         :return: depth image of shape [b, h, w]
         """
-        if self.input_shape != input_data.shape:
+        if np.any(self.input_shape != input_data.shape):
             raise TypeError("Wrong shape at input of model")
         self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
         self.interpreter.invoke()
