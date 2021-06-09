@@ -1,5 +1,7 @@
-from point_cloud import depth_to_xyz, xyz_to_volume, clip_by_border
-from run_model import run_model
+from PointCloud import PointCloud
+from run_model import DepthModel
+from camera_controller import CameraInterface
+from config import read_config, save_config
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
@@ -9,8 +11,11 @@ MODEL_PATH = "./lite_model_w_frl.tflite"
 
 
 def main():
-    cam_fov = (82.1, 52.2)
-    vol_empty = -1.231
+    cfg = read_config()
+    depth_model = DepthModel(cfg["model_path"])
+    camera = CameraInterface((cfg["var_webcam_fov_x"], cfg["var_webcam_fov_y"]),
+                             (cfg["var_crop_fov_x"], cfg["var_crop_fov_y"]),
+                             (224, 224))
     fig, ax = plt.subplots(1, 1)
     fig.suptitle('Garbage bin fill rate')
     plt.axis('off')
@@ -19,21 +24,22 @@ def main():
                        color='red',
                        fontsize=60)
     while True:
-        rgb, depth = run_model(MODEL_PATH)
-        depth = depth[0]
-        rgb = rgb[0]
-        xyz = depth_to_xyz(depth, fov=cam_fov)
-        xyz_clipped = clip_by_border(xyz,
-                                     (-1.4, 1.4),
-                                     (-0.5, 0.75),
-                                     (2.4, 1))
-        xyz_clipped[:, 2] = 1.5 - xyz_clipped[:, 2]
-        volume = xyz_to_volume(xyz_clipped)
-        fill_rate = (1 - round(volume, 3)/vol_empty)
+        rgb = camera.capture_image()
+        rgb = np.expand_dims(rgb, axis=0)  # Expand the first dimension to fit tflite model
+        depth = depth_model(rgb)
+        depth = depth[0]    # Remove batch dimension
+        rgb = rgb[0]        # Remove batch dimension
+        pc = PointCloud.from_depth(depth, fov=camera.output_fov)
+        pc = pc.select_roi(borders=np.asarray([[-1.4, 1.40],
+                                               [-0.5, 0.75],
+                                               [2.4,  1.00]]))
+        pc[:, 2] = 1.5 - pc[:, 2]
+        volume = pc.to_volume()
+        fill_rate = (1 - round(volume, 3)/cfg["var_empty_volume"])
         fill_rate_prc = round(fill_rate*100)
         print("Volume in container: ", volume, "m^3")
         display_image(fig, img, img_text, rgb, fill_rate_prc)
-        display_point_cloud(xyz_clipped)
+        display_point_cloud(pc)
 
 
 def display_image(fig, im, text, rgb, fill_rate):
